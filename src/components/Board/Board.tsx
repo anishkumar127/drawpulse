@@ -1,8 +1,11 @@
 "use client";
+import { useAppSelector } from "@/store/hooks";
 import { useEffect, useRef } from "react";
 
 export const Board = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const activeMenuItem = useAppSelector((state)=>state?.menu?.activeMenuItem);
+  const {color,size} = useAppSelector((state)=>state?.toolbox[activeMenuItem]);
 
   useEffect(() => {
     if (!canvasRef?.current) return;
