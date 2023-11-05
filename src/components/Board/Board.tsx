@@ -35,15 +35,22 @@ export const Board = () => {
 
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+    const beginPath = (x: number, y: number) => {
+      // console.log(typeof x, y);
+      context?.beginPath();
+      context?.moveTo(x, y);
+    };
+    const drawLine = (x: number, y: number) => {
+      context?.lineTo(x, y);
+      context?.stroke();
+    };
     const onMouseDown = (e: MouseEvent) => {
       shouldDraw.current = true;
-      context?.beginPath();
-      context?.moveTo(e?.clientX, e?.clientY);
+      beginPath(e?.clientX, e?.clientY);
     };
     const onMouseMove = (e: MouseEvent) => {
       if (!shouldDraw.current) return;
-      context?.lineTo(e?.clientX, e?.clientY);
-      context?.stroke();
+      drawLine(e?.clientX, e?.clientY);
     };
     const onMouseUp = (e: MouseEvent) => {
       shouldDraw.current = false;
