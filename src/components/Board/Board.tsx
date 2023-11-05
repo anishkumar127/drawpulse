@@ -1,9 +1,10 @@
 "use client";
 import { useAppSelector } from "@/store/hooks";
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 
 export const Board = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const shouldDraw = useRef<HTMLCanvasElement | boolean>(false);
   const activeMenuItem = useAppSelector((state) => state?.menu?.activeMenuItem);
   const { color, size } = useAppSelector(
     (state) => state?.toolbox[activeMenuItem]
@@ -24,15 +25,38 @@ export const Board = () => {
     changeConfig();
   }, [color, size]);
 
-  useEffect(() => {
+  // before browser paint.
+  useLayoutEffect(() => {
+    // run before the useEffect , before paint screen.
     if (!canvasRef?.current) return;
 
     const canvas = canvasRef?.current;
     const context = canvas?.getContext("2d");
 
-    // when mounting.
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+    const onMouseDown = (e: MouseEvent) => {
+      shouldDraw.current = true;
+      context?.beginPath();
+      context?.moveTo(e?.clientX, e?.clientY);
+    };
+    const onMouseMove = (e: MouseEvent) => {
+      if (!shouldDraw.current) return;
+      context?.lineTo(e?.clientX, e?.clientY);
+      context?.stroke();
+    };
+    const onMouseUp = (e: MouseEvent) => {
+      shouldDraw.current = false;
+    };
+
+    canvas.addEventListener("mousedown", onMouseDown);
+    canvas.addEventListener("mousemove", onMouseMove);
+    canvas.addEventListener("mouseup", onMouseUp);
+    return () => {
+      canvas.removeEventListener("mousedown", onMouseDown);
+      canvas.removeEventListener("mousemove", onMouseMove);
+      canvas.removeEventListener("mouseup", onMouseUp);
+    };
   }, []);
   return <canvas ref={canvasRef}></canvas>;
 };

@@ -10,7 +10,7 @@ export const Toolbox = () => {
   const showStrokeToolOption = activeMenuItem === MENU_ITMES?.PENCIL;
   const showBrushToolOption =
     MENU_ITMES?.PENCIL || activeMenuItem === MENU_ITMES?.ERASER;
-  const {color} = useAppSelector((state)=>state?.toolbox[activeMenuItem]);
+  const {color,size} = useAppSelector((state)=>state?.toolbox[activeMenuItem]);
   const updateBrushSize = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(reSizeBrush({ item: activeMenuItem, size: e?.target?.value }));
   };
@@ -71,6 +71,7 @@ export const Toolbox = () => {
               min={1}
               max={10}
               step={1}
+              value={size}
               onChange={updateBrushSize}
             />
           </div>
