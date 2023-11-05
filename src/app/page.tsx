@@ -1,3 +1,4 @@
+import { Board } from "@/components/Board/Board";
 import { Menu } from "@/components/Menu/Menu";
 import { Toolbox } from "@/components/Toolbox/Toolbox";
 
@@ -9,6 +10,8 @@ export default function Home() {
       <Menu />
       {/* Toolbar */}
       <Toolbox />
+      {/* Board */}
+      <Board/>
     </main>
   );
 }
