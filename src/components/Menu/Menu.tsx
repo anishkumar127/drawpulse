@@ -4,13 +4,16 @@ import { AiOutlineUndo, AiOutlineRedo } from "react-icons/ai";
 import styles from "./menu.module.css";
 import { MENU_ITMES } from "@/constants";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { onMenuItem } from "@/store/features/menuSlice";
+import { onActionItem, onMenuItem } from "@/store/features/menuSlice";
 import cx from "classnames";
 export const Menu = () => {
   const dispatch = useAppDispatch();
   const activeMenuItem = useAppSelector((state) => state.menu.activeMenuItem);
   const onHandleChange = (payload: string) => {
     dispatch(onMenuItem(payload));
+  };
+  const onActionChange = (payload: string) => {
+    dispatch(onActionItem(payload));
   };
   return (
     <div className={styles.menuContainer}>
@@ -36,12 +39,21 @@ export const Menu = () => {
         <RxEraser className={styles.icon} />
       </div>
       <div className={styles.iconWrapper}>
-        <AiOutlineUndo className={styles.icon} />
+        <AiOutlineUndo
+          className={styles.icon}
+          onClick={() => onActionChange(MENU_ITMES?.UNDO)}
+        />
       </div>
       <div className={styles.iconWrapper}>
-        <AiOutlineRedo className={styles.icon} />
+        <AiOutlineRedo
+          className={styles.icon}
+          onClick={() => onActionChange(MENU_ITMES?.REDO)}
+        />
       </div>
-      <div className={styles.iconWrapper}>
+      <div
+        className={styles.iconWrapper}
+        onClick={() => onActionChange(MENU_ITMES?.DOWNLOAD)}
+      >
         <RxDownload className={styles.icon} />
       </div>
     </div>
