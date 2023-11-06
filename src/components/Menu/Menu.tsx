@@ -38,17 +38,17 @@ export const Menu = () => {
       >
         <RxEraser className={styles.icon} />
       </div>
-      <div className={styles.iconWrapper}>
-        <AiOutlineUndo
-          className={styles.icon}
-          onClick={() => onActionChange(MENU_ITMES?.UNDO)}
-        />
+      <div
+        className={styles.iconWrapper}
+        onClick={() => onActionChange(MENU_ITMES?.UNDO)}
+      >
+        <AiOutlineUndo className={styles.icon} />
       </div>
-      <div className={styles.iconWrapper}>
-        <AiOutlineRedo
-          className={styles.icon}
-          onClick={() => onActionChange(MENU_ITMES?.REDO)}
-        />
+      <div
+        className={styles.iconWrapper}
+        onClick={() => onActionChange(MENU_ITMES?.REDO)}
+      >
+        <AiOutlineRedo className={styles.icon} />
       </div>
       <div
         className={styles.iconWrapper}

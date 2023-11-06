@@ -8,6 +8,9 @@ export const Board = () => {
   const dispatch = useAppDispatch();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const shouldDraw = useRef<HTMLCanvasElement | boolean>(false);
+  const drawHistory = useRef<any>([]);
+  const historyPointer = useRef<any>(0);
+
   const { activeMenuItem, actionMenuItem } = useAppSelector(
     (state) => state?.menu
   );
@@ -28,6 +31,11 @@ export const Board = () => {
       anchor.href = URL;
       anchor.download = "sketch.png";
       anchor.click();
+    }else if(actionMenuItem===MENU_ITMES?.UNDO || actionMenuItem===MENU_ITMES?.REDO){
+      if(historyPointer.current>0 && actionMenuItem===MENU_ITMES?.UNDO ) historyPointer.current -=1;
+      if(historyPointer.current< drawHistory.current.length-1 && actionMenuItem===MENU_ITMES?.REDO ) historyPointer.current +=1;
+      const imageData = drawHistory?.current[historyPointer.current];
+      context?.putImageData(imageData,0,0);
     }
     // return ()=>{
     dispatch(onActionItem(null));
@@ -52,7 +60,6 @@ export const Board = () => {
   useLayoutEffect(() => {
     // run before the useEffect , before paint screen.
     if (!canvasRef?.current) return;
-
     const canvas = canvasRef?.current;
     const context = canvas?.getContext("2d");
 
@@ -77,6 +84,9 @@ export const Board = () => {
     };
     const onMouseUp = (e: MouseEvent) => {
       shouldDraw.current = false;
+      const imageData = context?.getImageData(0,0,canvas?.width,canvas?.height);
+      drawHistory.current.push(imageData);
+      historyPointer.current = drawHistory?.current?.length-1;
     };
 
     canvas.addEventListener("mousedown", onMouseDown);
